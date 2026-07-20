@@ -1752,21 +1752,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "cometbft-testgen"
-version = "0.1.0-alpha.2"
-source = "git+https://github.com/cometbft/cometbft-rs.git?rev=ac3db79c5807cd1d0b8b14a7b8199b8d79d6408d#ac3db79c5807cd1d0b8b14a7b8199b8d79d6408d"
-dependencies = [
- "cometbft",
- "ed25519-consensus",
- "gumdrop",
- "serde",
- "serde_json",
- "simple-error",
- "tempfile",
- "time",
-]
-
-[[package]]
 name = "compact_str"
 version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2840,26 +2825,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "gumdrop"
-version = "0.8.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5bc700f989d2f6f0248546222d9b4258f5b02a171a431f8285a81c08142629e3"
-dependencies = [
- "gumdrop_derive",
-]
-
-[[package]]
-name = "gumdrop_derive"
-version = "0.8.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "729f9bd3449d77e7831a18abfb7ba2f99ee813dfd15b8c2167c9a54ba20aa99d"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 1.0.109",
-]
-
-[[package]]
 name = "h2"
 version = "0.3.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3106,12 +3071,9 @@ name = "helios-exex-light-client-verifier"
 version = "0.1.0"
 dependencies = [
  "cometbft",
- "cometbft-testgen",
  "derive_more 0.99.20",
  "flex-error",
  "serde",
- "serde_json",
- "sha2 0.10.9",
  "time",
 ]
 
@@ -6132,12 +6094,6 @@ name = "simdutf8"
 version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e3a9fe34e3e7a50316060351f37187a3f546bce95496156754b601a5fa71b76e"
-
-[[package]]
-name = "simple-error"
-version = "0.3.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "69da7c8ef9e55986dcaa55dd095bbf7d321e80cc91644f25ce26a83dbe9e7f14"
 
 [[package]]
 name = "siphasher"
