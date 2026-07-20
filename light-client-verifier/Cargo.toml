@@ -1,0 +1,22 @@
+[package]
+name = "helios-exex-light-client-verifier"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[features]
+default = ["rust-crypto", "flex-error/std"]
+rust-crypto = ["cometbft/rust-crypto"]
+secp256k1 = ["cometbft/secp256k1"]
+
+[dependencies]
+cometbft = { git = "https://github.com/cometbft/cometbft-rs.git", rev = "ac3db79c5807cd1d0b8b14a7b8199b8d79d6408d", default-features = false }
+derive_more = { version = "0.99.5", default-features = false, features = ["display"] }
+flex-error = { version = "0.4.4", default-features = false }
+serde = { version = "1.0.106", default-features = false }
+time = { version = "0.3", default-features = false }
+
+[dev-dependencies]
+cometbft-testgen = { git = "https://github.com/cometbft/cometbft-rs.git", rev = "ac3db79c5807cd1d0b8b14a7b8199b8d79d6408d", default-features = false }
+serde_json = { version = "1.0.106", default-features = false }
+sha2 = { version = "0.10", default-features = false }

@@ -1,0 +1,11 @@
+[package]
+name = "helios-exex-ts"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+helios-exex-data-network.workspace = true

@@ -1,0 +1,20 @@
+{
+  "name": "helios-exex-ts",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/lib.umd.js",
+  "module": "./dist/lib.mjs",
+  "types": "./dist/lib.d.ts",
+  "scripts": {
+    "build": "npm run build:wasm && npm run build:js",
+    "build:wasm": "wasm-pack build --target web --out-name index --out-dir pkg",
+    "build:js": "vite build && npm run build:types",
+    "build:types": "tsc --emitDeclarationOnly"
+  },
+  "devDependencies": {
+    "@rollup/plugin-wasm": "^6.2.2",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "wasm-pack": "^0.13.1"
+  }
+}

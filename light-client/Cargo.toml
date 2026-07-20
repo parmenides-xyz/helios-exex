@@ -1,0 +1,45 @@
+[package]
+name = "helios-exex-light-client"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[features]
+default = ["rpc-client", "flex-error/std"]
+rpc-client = ["tokio", "rust-crypto"]
+rust-crypto = [
+    "cometbft/rust-crypto",
+    "helios-exex-light-client-verifier/rust-crypto",
+]
+secp256k1 = [
+    "cometbft/secp256k1",
+    "cometbft-rpc/secp256k1",
+    "helios-exex-light-client-verifier/secp256k1",
+]
+lightstore-sled = ["sled"]
+unstable = ["rust-crypto"]
+mbt = ["rust-crypto"]
+
+[dependencies]
+async-trait = "0.1"
+cometbft = { git = "https://github.com/cometbft/cometbft-rs.git", rev = "ac3db79c5807cd1d0b8b14a7b8199b8d79d6408d", default-features = false }
+cometbft-rpc = { git = "https://github.com/cometbft/cometbft-rs.git", rev = "ac3db79c5807cd1d0b8b14a7b8199b8d79d6408d", default-features = false }
+helios-exex-light-client-verifier.workspace = true
+contracts = { version = "0.6.2", default-features = false }
+crossbeam-channel = { version = "0.5.11", default-features = false, features = ["std"] }
+derive_more = { version = "0.99.5", default-features = false, features = ["display"] }
+flex-error = { version = "0.4.4", default-features = false }
+futures = { version = "0.3.4", default-features = false }
+regex = "1.7.3"
+serde = { version = "1.0.106", default-features = false }
+serde_cbor = { version = "0.11.1", default-features = false, features = ["alloc", "std"] }
+serde_derive = { version = "1.0.106", default-features = false }
+serde_json = { version = "1.0.51", default-features = false }
+sled = { version = "0.34.3", optional = true, default-features = false }
+static_assertions = { version = "1.1.0", default-features = false }
+time = { version = "0.3", default-features = false, features = ["std"] }
+tokio = { version = "1.0", optional = true, default-features = false, features = ["rt", "time"] }
+tracing = { version = "0.1", default-features = false }
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+cometbft-rpc = { git = "https://github.com/cometbft/cometbft-rs.git", rev = "ac3db79c5807cd1d0b8b14a7b8199b8d79d6408d", default-features = false, features = ["http-client"] }

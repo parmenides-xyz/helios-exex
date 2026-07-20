@@ -1,0 +1,36 @@
+[workspace]
+resolver = "2"
+members = [
+    "light-client",
+    "light-client-verifier",
+    "data-network",
+    "data-network-precompiles",
+    "helios-exex-ts",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+
+[workspace.dependencies]
+alloy = { version = "=1.0.37", features = [
+    "consensus",
+    "network",
+    "rlp",
+    "rpc-types",
+] }
+alloy-primitives = { version = "1.6.1", default-features = false, features = ["std"] }
+alloy-sol-types = { version = "1.6.1", default-features = false, features = ["std"] }
+num-bigint = "0.4"
+helios-exex-light-client = { path = "light-client" }
+helios-exex-light-client-verifier = { path = "light-client-verifier" }
+helios-exex-data-network = { path = "data-network" }
+helios-exex-data-network-precompiles = { path = "data-network-precompiles" }
+revm = { version = "=34.0.0", default-features = false, features = [
+    "std",
+    "serde",
+    "optional_block_gas_limit",
+    "optional_eip3607",
+    "optional_no_base_fee",
+] }
