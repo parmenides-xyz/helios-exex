@@ -1,5 +1,5 @@
-# Helios ExEx node UniFFI
+# DATA Network (UniFFI)
 
-A UniFFI layer for the DATA Network light client that generates Swift bindings.
+UniFFI layer for DATA Network's light client.
 
-Run `./build-ios.sh` to generate the Swift bindings and XCFramework.
+Run `./build-ios.sh` to generate Swift bindings.
