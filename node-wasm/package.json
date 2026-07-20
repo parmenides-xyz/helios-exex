@@ -1,0 +1,41 @@
+{
+  "name": "helios-exex-node-wasm",
+  "description": "Browser bindings and EIP-1193 provider for the DATA Network light client",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/lib.umd.cjs",
+  "module": "./dist/lib.js",
+  "types": "./dist/lib.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/lib.d.ts",
+      "import": "./dist/lib.js",
+      "require": "./dist/lib.umd.cjs"
+    }
+  },
+  "scripts": {
+    "build": "npm run build:wasm && npm run build:js",
+    "build:wasm": "wasm-pack build --target web --out-name index --out-dir pkg",
+    "build:js": "vite build && npm run build:types",
+    "build:types": "tsc --emitDeclarationOnly",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@rollup/plugin-wasm": "^6.2.2",
+    "@types/uuid": "^10.0.0",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "wasm-pack": "^0.15.0"
+  },
+  "dependencies": {
+    "eventemitter3": "^5.0.1",
+    "uuid": "^11.0.5"
+  },
+  "files": [
+    "dist",
+    "pkg/**/*.js",
+    "pkg/**/*.d.ts",
+    "pkg/**/*.wasm",
+    "lib.ts"
+  ]
+}

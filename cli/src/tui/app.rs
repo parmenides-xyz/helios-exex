@@ -160,14 +160,6 @@ impl BlockInfo {
 
 fn get_chain_name(chain_id: u64) -> String {
     match chain_id {
-        1 => "Ethereum Mainnet".to_string(),
-        11155111 => "Sepolia Testnet".to_string(),
-        10 => "OP Mainnet".to_string(),
-        11155420 => "OP Sepolia".to_string(),
-        8453 => "Base Mainnet".to_string(),
-        84532 => "Base Sepolia".to_string(),
-        59144 => "Linea Mainnet".to_string(),
-        59141 => "Linea Sepolia".to_string(),
         1514 => "DATA Network Mainnet".to_string(),
         1315 => "DATA Network Aeneid".to_string(),
         _ => format!("Chain {chain_id}"),

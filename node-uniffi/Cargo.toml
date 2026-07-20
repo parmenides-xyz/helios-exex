@@ -1,0 +1,26 @@
+[package]
+name = "helios-exex-node-uniffi"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Mobile bindings for the Helios ExEx DATA Network light client"
+
+[lib]
+crate-type = ["lib", "staticlib", "cdylib"]
+
+[[bin]]
+name = "uniffi-bindgen"
+path = "./src/bin/uniffi-bindgen.rs"
+
+[dependencies]
+alloy.workspace = true
+helios-common = { git = "https://github.com/parmenides-xyz/helios.git", rev = "098ad96e3b91191d81946f075210168a6f924d28" }
+helios-exex-data-network.workspace = true
+helios-exex-light-client.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tokio = { workspace = true, features = ["macros", "sync", "rt-multi-thread"] }
+tokio-stream = { workspace = true, features = ["sync"] }
+uniffi = { workspace = true, features = ["tokio", "cli"] }
+url.workspace = true

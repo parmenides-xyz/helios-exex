@@ -6,7 +6,8 @@ members = [
     "light-client-verifier",
     "data-network",
     "data-network-precompiles",
-    "helios-exex-ts",
+    "node-wasm",
+    "node-uniffi",
 ]
 
 [workspace.package]
@@ -25,6 +26,13 @@ alloy = { version = "=1.0.37", features = [
 alloy-primitives = { version = "1.6.1", default-features = false, features = ["std"] }
 alloy-sol-types = { version = "1.6.1", default-features = false, features = ["std"] }
 num-bigint = "0.4"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+thiserror = "2.0.3"
+tokio = "1.49.0"
+tokio-stream = "0.1.18"
+uniffi = "0.29.2"
+url = "2.5"
 helios-exex-light-client = { path = "light-client" }
 helios-exex-light-client-verifier = { path = "light-client-verifier" }
 helios-exex-data-network = { path = "data-network" }

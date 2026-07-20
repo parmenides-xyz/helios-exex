@@ -22,7 +22,7 @@ use ui::draw;
 mod app;
 mod ui;
 
-/// Run the TUI application
+/// Run the TUI app
 pub async fn run<N: NetworkSpec>(client: HeliosClient<N>) -> Result<(), io::Error> {
     // Setup terminal
     enable_raw_mode()?;

@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#191919" />
+    <title>DATA Network Light Client</title>
+    <link
+      rel="preload"
+      href="/fonts/satoshi/Satoshi-Variable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/geist-mono/GeistMono-Variable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <div class="sync-progress" id="sync-progress" aria-hidden="true">
+      <span></span>
+    </div>
+
+    <div class="page-shell">
+      <header class="site-header">
+        <div class="brand-group">
+          <a class="wordmark" href="/" aria-label="DATA Network">DATA</a>
+          <div class="network-badge" id="network-badge">
+            <span class="status-dot" aria-hidden="true">
+              <span class="status-ping"></span>
+              <span class="status-core"></span>
+            </span>
+            <span>Mainnet</span>
+          </div>
+        </div>
+
+        <div class="header-height" title="Latest verified block">
+          <span class="header-height-label">Verified</span>
+          <span id="header-block">...</span>
+        </div>
+      </header>
+
+      <main class="main-content">
+        <section class="section-card" aria-labelledby="blocks-title">
+          <div class="section-header">
+            <div class="section-title" id="blocks-title">
+              Blocks <span class="section-count" id="block-count"></span>
+            </div>
+            <div class="live-badge" id="live-badge">
+              <span class="status-dot" aria-hidden="true">
+                <span class="status-ping"></span>
+                <span class="status-core"></span>
+              </span>
+              <span id="sync-status">Syncing</span>
+            </div>
+          </div>
+
+          <div class="data-grid" role="table" aria-label="Verified DATA Network blocks">
+            <div class="grid-header" role="row">
+              <div role="columnheader">Block</div>
+              <div role="columnheader">Hash</div>
+              <div class="align-end" role="columnheader">Time</div>
+              <div class="align-end" role="columnheader">Txns</div>
+            </div>
+            <div id="block-rows" class="grid-body" aria-busy="true">
+              <div class="block-row skeleton-row" role="row">
+                <div><span class="skeleton short"></span></div>
+                <div><span class="skeleton"></span></div>
+                <div><span class="skeleton short"></span></div>
+                <div><span class="skeleton tiny"></span></div>
+              </div>
+              <div class="block-row skeleton-row" role="row">
+                <div><span class="skeleton short"></span></div>
+                <div><span class="skeleton"></span></div>
+                <div><span class="skeleton short"></span></div>
+                <div><span class="skeleton tiny"></span></div>
+              </div>
+              <div class="block-row skeleton-row" role="row">
+                <div><span class="skeleton short"></span></div>
+                <div><span class="skeleton"></span></div>
+                <div><span class="skeleton short"></span></div>
+                <div><span class="skeleton tiny"></span></div>
+              </div>
+              <div class="block-row skeleton-row" role="row">
+                <div><span class="skeleton short"></span></div>
+                <div><span class="skeleton"></span></div>
+                <div><span class="skeleton short"></span></div>
+                <div><span class="skeleton tiny"></span></div>
+              </div>
+              <div class="block-row skeleton-row" role="row">
+                <div><span class="skeleton short"></span></div>
+                <div><span class="skeleton"></span></div>
+                <div><span class="skeleton short"></span></div>
+                <div><span class="skeleton tiny"></span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="details-grid">
+          <section class="info-card" aria-labelledby="client-title">
+            <div class="info-title" id="client-title">Light client</div>
+            <div class="info-body">
+              <div class="info-row">
+                <span>Status</span>
+                <strong id="client-status">Starting</strong>
+              </div>
+              <div class="info-row">
+                <span>Latest verified</span>
+                <strong id="verified-height">...</strong>
+              </div>
+              <div class="info-row">
+                <span>Chain ID</span>
+                <strong>1514</strong>
+              </div>
+              <div class="info-row">
+                <span>Storage</span>
+                <strong>Local storage</strong>
+              </div>
+            </div>
+          </section>
+
+          <section class="info-card" aria-labelledby="trust-title">
+            <div class="info-title" id="trust-title">Trust</div>
+            <div class="info-body">
+              <div class="info-row">
+                <span>Height</span>
+                <strong id="trust-height">...</strong>
+              </div>
+              <div class="info-row">
+                <span>Hash</span>
+                <strong class="truncate" id="trust-hash">...</strong>
+              </div>
+              <div class="info-row">
+                <span>Consensus RPC</span>
+                <strong class="truncate" id="consensus-rpc">...</strong>
+              </div>
+              <div class="info-row">
+                <span>Execution RPC</span>
+                <strong class="truncate" id="execution-rpc">...</strong>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
