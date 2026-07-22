@@ -6,14 +6,13 @@ use alloy::{
         TxEnvelope,
     },
     eips::{eip4895::Withdrawal, eip7685::Requests},
-    primitives::{Address, Bloom, Bytes, Sealable, B256, U256},
-    rlp::Encodable,
+    primitives::{Address, Bloom, Bytes, B256, U256},
     rpc::types::{
         engine::{
             CancunPayloadFields, ExecutionPayload, ExecutionPayloadSidecar, ExecutionPayloadV1,
             ExecutionPayloadV2, ExecutionPayloadV3, PraguePayloadFields,
         },
-        Block, BlockTransactions, Header, Transaction,
+        Block, Transaction,
     },
 };
 use cometbft::{
@@ -28,6 +27,7 @@ use tokio::sync::{
 };
 use tracing::{error, info, warn};
 
+use helios_common::fork_schedule::ForkSchedule;
 use helios_core::{consensus::Consensus, time::interval};
 use helios_exex_data_network_proto::{
     cosmos::tx::v1beta1::{TxBody, TxRaw},
@@ -97,6 +97,7 @@ impl Provider {
 struct Inner<DB: Database> {
     provider: Provider,
     last_comet_height: Option<Height>,
+    execution_forks: ForkSchedule,
     block_send: Sender<Block<Transaction>>,
     finalized_block_send: watch::Sender<Option<Block<Transaction>>>,
     db: Arc<DB>,
@@ -113,6 +114,7 @@ impl<DB: Database> ConsensusClient<DB> {
         let trust_options = db.load_trust_options()?;
         let consensus_rpc = config.consensus_rpc.clone();
         let verifier_options = config.verifier_options;
+        let execution_forks = config.execution_forks;
 
         #[cfg(not(target_arch = "wasm32"))]
         let run = tokio::spawn;
@@ -125,6 +127,7 @@ impl<DB: Database> ConsensusClient<DB> {
                 consensus_rpc,
                 trust_options,
                 verifier_options,
+                execution_forks,
                 block_send,
                 finalized_block_send,
                 db,
@@ -221,6 +224,7 @@ impl<DB: Database> Inner<DB> {
         consensus_rpc: reqwest::Url,
         trust_options: TrustOptions,
         verifier_options: helios_exex_light_client::verifier::options::Options,
+        execution_forks: ForkSchedule,
         block_send: Sender<Block<Transaction>>,
         finalized_block_send: watch::Sender<Option<Block<Transaction>>>,
         db: Arc<DB>,
@@ -247,6 +251,7 @@ impl<DB: Database> Inner<DB> {
         Ok(Self {
             provider,
             last_comet_height: None,
+            execution_forks,
             block_send,
             finalized_block_send,
             db,
@@ -260,7 +265,8 @@ impl<DB: Database> Inner<DB> {
             return Ok(());
         }
 
-        let block = fetch_execution_block(&self.provider, &light_block).await?;
+        let block =
+            fetch_execution_block(&self.provider, &light_block, &self.execution_forks).await?;
         self.last_comet_height = Some(light_block.height());
         self.db.save_trust_options(&TrustOptions {
             height: light_block.height(),
@@ -286,6 +292,7 @@ impl<DB: Database> Inner<DB> {
 pub(crate) async fn fetch_execution_block(
     provider: &Provider,
     light_block: &LightBlock,
+    execution_forks: &ForkSchedule,
 ) -> Result<Option<Block<Transaction>>> {
     let trusted_header = &light_block.signed_header.header;
     let block = provider.fetch_block(trusted_header.height).await?;
@@ -297,10 +304,10 @@ pub(crate) async fn fetch_execution_block(
     };
 
     let payload = decode_execution_payload(tx)?;
-    let parent_beacon_block_root = B256::try_from(trusted_header.app_hash.as_bytes())
+    let app_hash = B256::try_from(trusted_header.app_hash.as_bytes())
         .map_err(|_| eyre!("CometBFT app hash is not 32 bytes"))?;
 
-    payload_to_block(payload, parent_beacon_block_root).map(Some)
+    payload_to_block(payload, app_hash, execution_forks).map(Some)
 }
 
 fn verify_block_data(block: &CometBlock, light_block: &LightBlock) -> Result<()> {
@@ -378,50 +385,57 @@ fn decode_execution_payload(tx: &[u8]) -> Result<ExecutionPayloadV3> {
 }
 
 fn payload_to_block(
-    payload: ExecutionPayloadV3,
-    parent_beacon_block_root: B256,
+    execution_payload: ExecutionPayloadV3,
+    app_hash: B256,
+    execution_forks: &ForkSchedule,
 ) -> Result<Block<Transaction>> {
-    let expected_hash = payload.payload_inner.payload_inner.block_hash;
-    let cancun_fields = CancunPayloadFields::new(parent_beacon_block_root, Vec::new());
-    let sidecar =
-        ExecutionPayloadSidecar::v4(cancun_fields, PraguePayloadFields::new(Requests::default()));
-    let block = ExecutionPayload::V3(payload)
+    let payload = ExecutionPayload::V3(execution_payload);
+    let expected_block_hash = payload.block_hash();
+
+    let versioned_hashes = Vec::new();
+    let parent_beacon_block_root = app_hash;
+    let cancun = CancunPayloadFields::new(parent_beacon_block_root, versioned_hashes);
+
+    let sidecar = if payload.timestamp() >= execution_forks.prague_timestamp {
+        let requests = Requests::default();
+        let prague = PraguePayloadFields::new(requests);
+        ExecutionPayloadSidecar::v4(cancun, prague)
+    } else {
+        ExecutionPayloadSidecar::v3(cancun)
+    };
+
+    let consensus_block = payload
         .try_into_block_with_sidecar::<TxEnvelope>(&sidecar)
         .wrap_err("failed to construct execution block from payload")?;
-    let actual_hash = block.header.hash_slow();
 
-    if actual_hash != expected_hash {
-        bail!("execution payload block hash mismatch: expected {expected_hash}, got {actual_hash}");
+    let block_hash = consensus_block.header.hash_slow();
+    if block_hash != expected_block_hash {
+        bail!(
+            "execution payload block hash mismatch: expected {expected_block_hash}, got {block_hash}"
+        );
     }
 
-    let size = U256::from(block.length());
-    let header = Header::from_consensus(
-        block.header.clone().seal_slow(),
-        Some(U256::ZERO),
-        Some(size),
-    );
-    let block_number = block.header.number;
-    let base_fee = block.header.base_fee_per_gas;
-    let mut index = 0u64;
-    let block = block.try_map_transactions(|tx| {
-        let tx_info = TransactionInfo {
-            hash: None,
-            index: Some(index),
-            block_hash: Some(actual_hash),
+    let block_number = consensus_block.header.number;
+    let base_fee = consensus_block.header.base_fee_per_gas;
+    let mut transaction_index = 0;
+
+    let rpc_block = Block::from_consensus(consensus_block, Some(U256::ZERO));
+    let rpc_block = rpc_block.try_map_transactions(|transaction| {
+        let transaction_info = TransactionInfo {
+            hash: Some(*transaction.tx_hash()),
+            index: Some(transaction_index),
+            block_hash: Some(block_hash),
             block_number: Some(block_number),
             base_fee,
         };
-        index += 1;
+        transaction_index += 1;
 
-        tx.try_into_recovered()
-            .map(|tx| Transaction::from_transaction(tx, tx_info))
+        transaction
+            .try_into_recovered()
+            .map(|transaction| Transaction::from_transaction(transaction, transaction_info))
     })?;
-    let withdrawals = block.body.withdrawals;
 
-    Ok(
-        Block::new(header, BlockTransactions::Full(block.body.transactions))
-            .with_withdrawals(withdrawals),
-    )
+    Ok(rpc_block)
 }
 
 fn payload_from_proto(payload: ExecutionPayloadDeneb) -> Result<ExecutionPayloadV3> {
