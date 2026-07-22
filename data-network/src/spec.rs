@@ -2,11 +2,15 @@ use std::{collections::HashMap, sync::Arc};
 
 use alloy::{
     consensus::{
+        error::UnsupportedTransactionType,
         proofs::{calculate_transaction_root, calculate_withdrawals_root},
         Receipt, ReceiptWithBloom, TxReceipt, TxType, TypedTransaction,
     },
     eips::{BlockId, Encodable2718},
-    network::{BuildResult, Network, NetworkWallet, TransactionBuilder, TransactionBuilderError},
+    network::{
+        BuildResult, Network, NetworkWallet, TransactionBuilder, TransactionBuilderError,
+        UnbuiltTransactionError,
+    },
     primitives::{Address, Bytes, ChainId, TxKind, U256},
     rpc::types::{state::StateOverride, AccessList, Log, TransactionRequest},
 };
@@ -263,7 +267,10 @@ impl TransactionBuilder<DataNetwork> for TransactionRequest {
 
     #[doc(alias = "output_transaction_type_checked")]
     fn output_tx_type_checked(&self) -> Option<TxType> {
-        self.buildable_type()
+        match self.buildable_type() {
+            Some(TxType::Eip4844) => None,
+            tx_type => tx_type,
+        }
     }
 
     fn prep_for_submission(&mut self) {
@@ -279,6 +286,16 @@ impl TransactionBuilder<DataNetwork> for TransactionRequest {
                     .into_unbuilt(self),
             );
         }
+
+        if let Some(TxType::Eip4844) = self.buildable_type() {
+            return Err(UnbuiltTransactionError {
+                request: self,
+                error: TransactionBuilderError::Custom(Box::new(UnsupportedTransactionType::new(
+                    TxType::Eip4844,
+                ))),
+            });
+        }
+
         Ok(self.build_typed_tx().expect("checked by missing_keys"))
     }
 

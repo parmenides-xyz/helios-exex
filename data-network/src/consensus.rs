@@ -349,7 +349,12 @@ fn verify_block_data(block: &CometBlock, light_block: &LightBlock) -> Result<()>
 }
 
 fn block_data_hash(data: &[impl AsRef<[u8]>]) -> [u8; 32] {
-    simple_hash_from_byte_vectors::<Sha256>(data)
+    let transaction_hashes = data
+        .iter()
+        .map(|tx| <Sha256 as cometbft::crypto::Sha256>::digest(tx))
+        .collect::<Vec<_>>();
+
+    simple_hash_from_byte_vectors::<Sha256>(&transaction_hashes)
 }
 
 fn decode_execution_payload(tx: &[u8]) -> Result<ExecutionPayloadV3> {
