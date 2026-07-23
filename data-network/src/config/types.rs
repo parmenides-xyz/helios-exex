@@ -9,5 +9,6 @@ pub struct ChainConfig {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct TrustOptions {
     pub height: Height,
+    #[serde(with = "cometbft::serializers::hash")]
     pub hash: Hash,
 }

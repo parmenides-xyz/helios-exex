@@ -34,6 +34,7 @@ Install common dependencies.
 
 ```bash
 # install dependencies
+sudo apt-get update
 sudo apt-get install -y build-essential curl git jq pkg-config libssl-dev
 
 # install Rust (if necessary)
