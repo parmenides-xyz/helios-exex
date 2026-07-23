@@ -28,7 +28,7 @@ private enum ClientPhase {
         switch self {
         case .syncing: "Syncing"
         case .live: "Live"
-        case .reconnecting: "Reconnecting"
+        case .reconnecting: "Loading"
         case .error: "Error"
         }
     }
@@ -37,7 +37,7 @@ private enum ClientPhase {
         switch self {
         case .syncing: Palette.tertiary
         case .live: Palette.positive
-        case .reconnecting: Palette.accent
+        case .reconnecting: Palette.tertiary
         case .error: Palette.negative
         }
     }
@@ -221,13 +221,18 @@ struct DataNetworkNodeView: View {
                     BlocksCard(
                         phase: viewModel.phase,
                         latestHeight: viewModel.latestHeight,
-                        blocks: viewModel.blocks,
-                        error: viewModel.error
+                        blocks: viewModel.blocks
+                    )
+                    .redacted(
+                        reason: viewModel.phase == .reconnecting ? .placeholder : []
                     )
 
                     DetailsView(
                         phase: viewModel.phase,
                         latestHeight: viewModel.latestHeight
+                    )
+                    .redacted(
+                        reason: viewModel.phase == .reconnecting ? .placeholder : []
                     )
                 }
                 .padding(.horizontal, 16)
@@ -235,7 +240,7 @@ struct DataNetworkNodeView: View {
                 .padding(.bottom, 48)
             }
 
-            if viewModel.phase == .syncing {
+            if viewModel.phase == .syncing || viewModel.phase == .reconnecting {
                 ProgressView()
                     .progressViewStyle(.linear)
                     .tint(Palette.accent)
@@ -302,7 +307,6 @@ private struct BlocksCard: View {
     let phase: ClientPhase
     let latestHeight: UInt64?
     let blocks: [VerifiedBlock]
-    let error: Error?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -347,7 +351,7 @@ private struct BlocksCard: View {
                     BlockHeaderRow()
                     DashedDivider()
 
-                    if error != nil {
+                    if phase == .error {
                         Color.clear
                             .frame(width: 680, height: 245)
                     } else if blocks.isEmpty {
@@ -366,12 +370,8 @@ private struct BlocksCard: View {
                 .background(Palette.card)
             }
             .overlay(alignment: .bottom) {
-                if error != nil {
-                    Text(
-                        phase == .reconnecting
-                            ? "Connection interrupted. Retrying..."
-                            : "Unable to connect to DATA Network."
-                    )
+                if phase == .error {
+                    Text("Unable to connect to DATA Network.")
                         .font(.system(size: 13, design: .monospaced))
                         .foregroundStyle(Palette.negative)
                         .multilineTextAlignment(.center)
