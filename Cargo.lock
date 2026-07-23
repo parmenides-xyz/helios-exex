@@ -1762,8 +1762,7 @@ dependencies = [
 [[package]]
 name = "cometbft"
 version = "0.1.0-alpha.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "77ec0bb28806a55912b4f54e4600df647a215525deebeaefadbc07b23b178d08"
+source = "git+https://github.com/cometbft/cometbft-rs.git?rev=ac3db79c5807cd1d0b8b14a7b8199b8d79d6408d#ac3db79c5807cd1d0b8b14a7b8199b8d79d6408d"
 dependencies = [
  "bytes",
  "cometbft-proto",
@@ -1775,8 +1774,7 @@ dependencies = [
  "k256",
  "num-traits",
  "once_cell",
- "prost 0.12.6",
- "prost-types 0.12.6",
+ "prost",
  "ripemd",
  "serde",
  "serde_bytes",
@@ -1793,8 +1791,7 @@ dependencies = [
 [[package]]
 name = "cometbft-config"
 version = "0.1.0-alpha.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5238f4070419b70d9613856fc137a5413590258180e24189ed3bdb9ddac2c87e"
+source = "git+https://github.com/cometbft/cometbft-rs.git?rev=ac3db79c5807cd1d0b8b14a7b8199b8d79d6408d#ac3db79c5807cd1d0b8b14a7b8199b8d79d6408d"
 dependencies = [
  "cometbft",
  "flex-error",
@@ -1807,15 +1804,11 @@ dependencies = [
 [[package]]
 name = "cometbft-proto"
 version = "0.1.0-alpha.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b37df177a39e7400b554ed95addf83e826a2bbf177fb7357bc8d4e3d1a954f63"
+source = "git+https://github.com/cometbft/cometbft-rs.git?rev=ac3db79c5807cd1d0b8b14a7b8199b8d79d6408d#ac3db79c5807cd1d0b8b14a7b8199b8d79d6408d"
 dependencies = [
  "bytes",
  "flex-error",
- "num-derive",
- "num-traits",
- "prost 0.12.6",
- "prost-types 0.12.6",
+ "prost",
  "serde",
  "serde_bytes",
  "subtle-encoding",
@@ -1825,8 +1818,7 @@ dependencies = [
 [[package]]
 name = "cometbft-rpc"
 version = "0.1.0-alpha.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4949f50354a0728082b90ddc2cb070b186c7242ee7ff9f6a47d2eee55d116916"
+source = "git+https://github.com/cometbft/cometbft-rs.git?rev=ac3db79c5807cd1d0b8b14a7b8199b8d79d6408d#ac3db79c5807cd1d0b8b14a7b8199b8d79d6408d"
 dependencies = [
  "async-trait",
  "bytes",
@@ -3073,7 +3065,7 @@ checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
 
 [[package]]
 name = "helios-exex-node-uniffi"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "alloy",
  "phos-data-network",
@@ -3090,7 +3082,7 @@ dependencies = [
 
 [[package]]
 name = "helios-exex-node-wasm"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "alloy",
  "console_error_panic_hook",
@@ -4170,17 +4162,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "521739c6d2bac4aa25192232afe6841231376b2b26d4d9fae5ecf8ca5772e441"
 
 [[package]]
-name = "num-derive"
-version = "0.4.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ed3955f1a9c7c0c15e092f9c887db08b1fc683305fdf6eb6684f22555355e202"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.119",
-]
-
-[[package]]
 name = "num-integer"
 version = "0.1.46"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4601,7 +4582,7 @@ dependencies = [
 
 [[package]]
 name = "phos-cli"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "alloy",
  "chrono",
@@ -4624,7 +4605,7 @@ dependencies = [
 
 [[package]]
 name = "phos-data-network"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "alloy",
  "async-trait",
@@ -4639,7 +4620,7 @@ dependencies = [
  "phos-helios-core",
  "phos-helios-revm-utils",
  "phos-light-client",
- "prost 0.13.5",
+ "prost",
  "reqwest 0.11.27",
  "revm",
  "serde",
@@ -4653,7 +4634,7 @@ dependencies = [
 
 [[package]]
 name = "phos-data-network-precompiles"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "alloy-primitives",
  "alloy-sol-types",
@@ -4666,19 +4647,18 @@ dependencies = [
 
 [[package]]
 name = "phos-data-network-proto"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
- "prost 0.13.5",
+ "prost",
  "prost-build",
- "prost-types 0.13.5",
+ "prost-types",
  "protox",
 ]
 
 [[package]]
 name = "phos-helios-common"
 version = "0.11.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "80cd9a4b4e792fdf2403d2e81f7636247cb8f5216b219ff58ca6fa31fc51c0c5"
+source = "git+https://github.com/parmenides-xyz/helios.git?rev=6a60c45ba4d629582c752e4e4eb13977ac3e802d#6a60c45ba4d629582c752e4e4eb13977ac3e802d"
 dependencies = [
  "alloy",
  "async-trait",
@@ -4694,8 +4674,7 @@ dependencies = [
 [[package]]
 name = "phos-helios-core"
 version = "0.11.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "63d20ce04a4963b4f9cc5c02bf3b58c4723dc83cf63bc47261f092c7a751767f"
+source = "git+https://github.com/parmenides-xyz/helios.git?rev=6a60c45ba4d629582c752e4e4eb13977ac3e802d#6a60c45ba4d629582c752e4e4eb13977ac3e802d"
 dependencies = [
  "alloy",
  "alloy-trie",
@@ -4725,8 +4704,7 @@ dependencies = [
 [[package]]
 name = "phos-helios-revm-utils"
 version = "0.11.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "68ba4164eee0cbc6ce76351ccb6205e71fd6f38544ad850832633301783a8da6"
+source = "git+https://github.com/parmenides-xyz/helios.git?rev=6a60c45ba4d629582c752e4e4eb13977ac3e802d#6a60c45ba4d629582c752e4e4eb13977ac3e802d"
 dependencies = [
  "alloy",
  "eyre",
@@ -4741,8 +4719,7 @@ dependencies = [
 [[package]]
 name = "phos-helios-verifiable-api-client"
 version = "0.11.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "59b6be27e3f86e68125d72904c1362430b0b42bc70f92d9a73358ff2914fd8f2"
+source = "git+https://github.com/parmenides-xyz/helios.git?rev=6a60c45ba4d629582c752e4e4eb13977ac3e802d#6a60c45ba4d629582c752e4e4eb13977ac3e802d"
 dependencies = [
  "alloy",
  "async-trait",
@@ -4761,8 +4738,7 @@ dependencies = [
 [[package]]
 name = "phos-helios-verifiable-api-types"
 version = "0.11.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5b917e2fb70f661d045a2e3f13cbc3f040b7cbbdcc060c08b1c9c880f3a86891"
+source = "git+https://github.com/parmenides-xyz/helios.git?rev=6a60c45ba4d629582c752e4e4eb13977ac3e802d#6a60c45ba4d629582c752e4e4eb13977ac3e802d"
 dependencies = [
  "alloy",
  "phos-helios-common",
@@ -4772,7 +4748,7 @@ dependencies = [
 
 [[package]]
 name = "phos-light-client"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "async-trait",
  "cometbft",
@@ -4797,7 +4773,7 @@ dependencies = [
 
 [[package]]
 name = "phos-light-client-verifier"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "cometbft",
  "derive_more 0.99.20",
@@ -5000,22 +4976,12 @@ dependencies = [
 
 [[package]]
 name = "prost"
-version = "0.12.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "deb1435c188b76130da55f17a466d252ff7b1418b2ad3e037d127b94e3411f29"
-dependencies = [
- "bytes",
- "prost-derive 0.12.6",
-]
-
-[[package]]
-name = "prost"
 version = "0.13.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2796faa41db3ec313a31f7624d9286acf277b52de526150b7e69f3debf891ee5"
 dependencies = [
  "bytes",
- "prost-derive 0.13.5",
+ "prost-derive",
 ]
 
 [[package]]
@@ -5031,24 +4997,11 @@ dependencies = [
  "once_cell",
  "petgraph",
  "prettyplease",
- "prost 0.13.5",
- "prost-types 0.13.5",
+ "prost",
+ "prost-types",
  "regex",
  "syn 2.0.119",
  "tempfile",
-]
-
-[[package]]
-name = "prost-derive"
-version = "0.12.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "81bddcdb20abf9501610992b6759a4c888aef7d1a7247ef75e2404275ac24af1"
-dependencies = [
- "anyhow",
- "itertools 0.10.5",
- "proc-macro2",
- "quote",
- "syn 2.0.119",
 ]
 
 [[package]]
@@ -5072,17 +5025,8 @@ checksum = "37587d5a8a1b3dc9863403d084fc2254b91ab75a702207098837950767e2260b"
 dependencies = [
  "logos",
  "miette",
- "prost 0.13.5",
- "prost-types 0.13.5",
-]
-
-[[package]]
-name = "prost-types"
-version = "0.12.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9091c90b0a32608e984ff2fa4091273cbdd755d54935c51d520887f4a1dbd5b0"
-dependencies = [
- "prost 0.12.6",
+ "prost",
+ "prost-types",
 ]
 
 [[package]]
@@ -5091,7 +5035,7 @@ version = "0.13.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "52c2c1bf36ddb1a1c396b3601a3cec27c2462e45f07c386894ec3ccf5332bd16"
 dependencies = [
- "prost 0.13.5",
+ "prost",
 ]
 
 [[package]]
@@ -5102,9 +5046,9 @@ checksum = "424c2bd294b69c49b949f3619362bc3c5d28298cd1163b6d1a62df37c16461aa"
 dependencies = [
  "bytes",
  "miette",
- "prost 0.13.5",
+ "prost",
  "prost-reflect",
- "prost-types 0.13.5",
+ "prost-types",
  "protox-parse",
  "thiserror 2.0.19",
 ]
@@ -5117,7 +5061,7 @@ checksum = "57927f9dbeeffcce7192404deee6157a640cbb3fe8ac11eabbe571565949ab75"
 dependencies = [
  "logos",
  "miette",
- "prost-types 0.13.5",
+ "prost-types",
  "thiserror 2.0.19",
 ]
 
