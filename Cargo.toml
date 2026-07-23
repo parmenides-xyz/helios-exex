@@ -53,11 +53,6 @@ revm = { version = "=34.0.0", default-features = false, features = [
 ] }
 
 [patch.crates-io]
-phos-helios-common = { git = "https://github.com/parmenides-xyz/helios.git", rev = "6a60c45ba4d629582c752e4e4eb13977ac3e802d" }
-phos-helios-core = { git = "https://github.com/parmenides-xyz/helios.git", rev = "6a60c45ba4d629582c752e4e4eb13977ac3e802d" }
-phos-helios-revm-utils = { git = "https://github.com/parmenides-xyz/helios.git", rev = "6a60c45ba4d629582c752e4e4eb13977ac3e802d" }
-phos-helios-verifiable-api-client = { git = "https://github.com/parmenides-xyz/helios.git", rev = "6a60c45ba4d629582c752e4e4eb13977ac3e802d" }
-phos-helios-verifiable-api-types = { git = "https://github.com/parmenides-xyz/helios.git", rev = "6a60c45ba4d629582c752e4e4eb13977ac3e802d" }
 phos-light-client = { path = "light-client" }
 phos-light-client-verifier = { path = "light-client-verifier" }
 phos-data-network = { path = "data-network" }
