@@ -1,5 +1,3 @@
-<div align="center">
-
 # phos
 
 <a href="https://crates.io/crates/phos-cli"><img src="https://img.shields.io/crates/v/phos-cli?label=phos-cli" alt="crates.io phos-cli"></a>
@@ -13,8 +11,6 @@
 <a href="https://crates.io/crates/phos-helios-revm-utils"><img src="https://img.shields.io/crates/v/phos-helios-revm-utils?label=phos-helios-revm-utils" alt="crates.io phos-helios-revm-utils"></a>
 <a href="https://crates.io/crates/phos-helios-verifiable-api-client"><img src="https://img.shields.io/crates/v/phos-helios-verifiable-api-client?label=phos-helios-verifiable-api-client" alt="crates.io phos-helios-verifiable-api-client"></a>
 <a href="https://crates.io/crates/phos-helios-verifiable-api-types"><img src="https://img.shields.io/crates/v/phos-helios-verifiable-api-types?label=phos-helios-verifiable-api-types" alt="crates.io phos-helios-verifiable-api-types"></a>
-
-</div>
 
 Light client for DATA Network (formerly Story Protocol) written in Rust, with native + browser + iOS support.
 
